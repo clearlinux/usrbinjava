@@ -1,0 +1,67 @@
+The formatting part of the coding style is easy; we follow the linux kernel
+style with one key exception:
+
+if/else statements ALWAYS have {}'s, even if there is only 1 statement.
+So
+
+if (foo) {
+	bar();
+}
+
+the reason for this is that this is both less error-prone, and easier to put
+temporary or permanent logging/etc statements inside the {}'s.
+
+
+
+
+
+A note on error handling
+========================
+The software in this project is system critical software, to a degree where
+failure really is not an option:
+
+The impact of the application failing is VERY SIGNIFICANT.
+
+For that reason, we need to take great care to get error handling robust,
+and not make some medium level issue worse by failing the whole system.
+
+
+Rule 1: In userspace, malloc() does not fail
+--------------------------------------------
+(The Thiago rule of memory management)
+
+In userspace, malloc() simply does not fail. 
+"But But". We have 47 bits of address space to fill before malloc() would fail
+due to being out of space. It just won't happen.
+
+Because of this, we're not going to check for, or handle, malloc() failures.
+For one, in practice all you can do is exit, and the next line after
+malloc() will crash the program with the same effect.
+
+And more than that, the error handling, that never will be used, complicates
+the program code enormously and is impossible to test, and thus impossible
+to get right.
+
+
+Rule 2: Deal gracefully with expected failures
+----------------------------------------------
+Some kind of errors are actually expected, normal conditions, and should be
+handled sensibly, business as usual.  For example, the lack of configuration
+file should be handled silently by just using the system defaults.
+
+
+Rule 3: Correct unexpected failures
+-----------------------------------
+Other kind of errors are not expected. These kind of errors must be *fixed*
+as part of the error handling, so that the system can return to an expected
+situation.  Just passing the error up the call chain is rarely the right
+answer, that just passes the buck to a part of the software that knows even
+less about how to properly correct the failure.
+
+Example: If a configuration file was required, but none exists, the error
+handling for this scenario should include writing out a reference
+configuration file with default values filled in.
+
+Example: If you really want to handle a memory allocation failure, you must
+free at least as much memory as you tried to allocate to allow the system to
+make progress in its execution.

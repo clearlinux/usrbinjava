@@ -27,6 +27,7 @@
  *
  *   Authors:
  *         Arjan van de Ven <arjan@linux.intel.com>
+ *         Athenas Jimenez  <athenas.jimenez.gonzalez@intel.com>
  *
  */
 
@@ -43,5 +44,23 @@ int main(int argc, char **argv)
 	char java[4096];
 	strcpy(java, "/usr/bin/false");
 
+	if (getenv("JAVA_HOME")) {
+		strcpy(java, getenv("JAVA_HOME"));
+	}
+	else {
+		strcpy(java, "/usr/lib/jvm/java-1.11.0-openjdk");
+	}
+
+	strcat(java, "/bin/");
+	strcat(java, argv[0]);
+
+	// If cannot access
+	if (access(java, X_OK)) {
+		printf("Command not available for java version.\n");
+		printf("JAVA_HOME=%s\n", getenv("JAVA_HOME"));
+		return EXIT_FAILURE;
+	}
+
+	execvp(java, argv);
 	return EXIT_SUCCESS;
 }

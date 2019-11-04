@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 	char java[4096];
 	strcpy(java, "/usr/bin/false");
 
-	if (getenv("JAVA_HOME")) {
-		strcpy(java, getenv("JAVA_HOME"));
+	if (secure_getenv("JAVA_HOME")) {
+		strcpy(java, secure_getenv("JAVA_HOME"));
 	}
 	else {
 		if (access("/usr/lib/jvm/java-1.11.0-openjdk", F_OK) == 0) {
@@ -55,24 +55,24 @@ int main(int argc, char **argv)
 		else {
 			if (access("/usr/lib/jvm/java-1.8.0-openjdk", F_OK) == 0) {
 				strcpy(java, "/usr/lib/jvm/java-1.8.0-openjdk");
-				setenv("JAVA_HOME", "/usr/lib/jvm/java-1.18.0-openjdk", 0);
+				setenv("JAVA_HOME", "/usr/lib/jvm/java-1.8.0-openjdk", 0);
 			}
 			else {
 				if (access("/usr/lib/jvm/java-1.13.0-openjdk", F_OK) == 0) {
 					strcpy(java, "/usr/lib/jvm/java-1.13.0-openjdk");
-					setenv("JAVA_HOME", "/usr/lib/jvm/java-1.13.0-openjdk", )0);
+					setenv("JAVA_HOME", "/usr/lib/jvm/java-1.13.0-openjdk", 0);
 				}
 			}
 		}
 	}
 
 	strcat(java, "/bin/");
-	strcat(java, argv[0]);
+	strncat(java, argv[0], 25);
 
 	// If cannot access
 	if (access(java, X_OK)) {
-		fprintf(stderr, "Command not available for java version.\n");
-		fprintf(stderr, "JAVA_HOME=%s\n", getenv("JAVA_HOME"));
+		fprintf(stderr, "Command not found at %s.\n", java);
+		fprintf(stderr, "JAVA_HOME=%s\n", secure_getenv("JAVA_HOME"));
 		return EXIT_FAILURE;
 	}
 

@@ -48,7 +48,19 @@ int main(int argc, char **argv)
 		strcpy(java, getenv("JAVA_HOME"));
 	}
 	else {
-		strcpy(java, "/usr/lib/jvm/java-1.11.0-openjdk");
+		if (access("/usr/lib/jvm/java-1.11.0-openjdk", F_OK) == 0) {
+			strcpy(java, "/usr/lib/jvm/java-1.11.0-openjdk");
+		}
+		else {
+			if (access("/usr/lib/jvm/java-1.8.0-openjdk", F_OK) == 0) {
+				strcpy(java, "/usr/lib/jvm/java-1.8.0-openjdk");
+			}
+			else {
+				if (access("/usr/lib/jvm/java-1.13.0-openjdk", F_OK) == 0) {
+					strcpy(java, "/usr/lib/jvm/java-1.13.0-openjdk");
+				}
+			}
+		}
 	}
 
 	strcat(java, "/bin/");

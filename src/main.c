@@ -56,8 +56,8 @@ int main(int argc, char **argv)
 
 	// If cannot access
 	if (access(java, X_OK)) {
-		printf("Command not available for java version.\n");
-		printf("JAVA_HOME=%s\n", getenv("JAVA_HOME"));
+		fprintf(stderr, "Command not available for java version.\n");
+		fprintf(stderr, "JAVA_HOME=%s\n", getenv("JAVA_HOME"));
 		return EXIT_FAILURE;
 	}
 

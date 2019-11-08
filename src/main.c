@@ -48,14 +48,14 @@ int main(int argc, char **argv)
 		strcpy(java, secure_getenv("JAVA_HOME"));
 	}
 	else {
-		if (access("/usr/lib/jvm/java-1.11.0-openjdk", F_OK) == 0) {
-			strcpy(java, "/usr/lib/jvm/java-1.11.0-openjdk");
-			setenv("JAVA_HOME", "/usr/lib/jvm/java-1.11.0-openjdk", 0);
+		if (access("/usr/lib/jvm/java-1.8.0-openjdk", F_OK) == 0) {
+			strcpy(java, "/usr/lib/jvm/java-1.8.0-openjdk");
+			setenv("JAVA_HOME", "/usr/lib/jvm/java-1.8.0-openjdk", 0);
 		}
 		else {
-			if (access("/usr/lib/jvm/java-1.8.0-openjdk", F_OK) == 0) {
-				strcpy(java, "/usr/lib/jvm/java-1.8.0-openjdk");
-				setenv("JAVA_HOME", "/usr/lib/jvm/java-1.8.0-openjdk", 0);
+			if (access("/usr/lib/jvm/java-1.11.0-openjdk", F_OK) == 0) {
+				strcpy(java, "/usr/lib/jvm/java-1.11.0-openjdk");
+				setenv("JAVA_HOME", "/usr/lib/jvm/java-1.11.0-openjdk", 0);
 			}
 			else {
 				if (access("/usr/lib/jvm/java-1.13.0-openjdk", F_OK) == 0) {

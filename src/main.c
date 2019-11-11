@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 	}
 
 	strcat(java, "/bin/");
-	strncat(java, argv[0], 25);
+	strncat(java, basename(argv[0]), 25);
 
 	// If cannot access
 	if (access(java, X_OK)) {
